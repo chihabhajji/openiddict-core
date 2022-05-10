@@ -40,7 +40,7 @@ public class OpenIddictEntityFrameworkCoreApplicationConfiguration<TApplication,
         // Warning: the non-generic overlord is deliberately used to work around
         // a breaking change introduced in Entity Framework Core 3.x (where a
         // generic entity type builder is now returned by the HasIndex() method).
-        builder.HasIndex(nameof(OpenIddictEntityFrameworkCoreApplication.ClientId))
+        builder.HasIndex(nameof(TApplication.ClientId))
                .IsUnique();
 
         builder.Property(application => application.ClientId)
@@ -61,15 +61,15 @@ public class OpenIddictEntityFrameworkCoreApplicationConfiguration<TApplication,
 
         builder.HasMany(application => application.Authorizations)
                .WithOne(authorization => authorization.Application!)
-               .HasForeignKey(nameof(OpenIddictEntityFrameworkCoreAuthorization.Application) +
-                              nameof(OpenIddictEntityFrameworkCoreApplication.Id))
+               .HasForeignKey(nameof(TAuthorization.Application) +
+                              nameof(TApplication.Id))
                .IsRequired(required: false);
 
         builder.HasMany(application => application.Tokens)
                .WithOne(token => token.Application!)
-               .HasForeignKey(nameof(OpenIddictEntityFrameworkCoreToken.Application) + nameof(OpenIddictEntityFrameworkCoreApplication.Id))
+               .HasForeignKey(nameof(TToken.Application) + nameof(TApplication.Id))
                .IsRequired(required: false);
 
-        builder.ToTable("OpenIddictApplications");
+        builder.ToTable(nameof(TApplication) + "s");
     }
 }
